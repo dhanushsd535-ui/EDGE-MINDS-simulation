@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SecurePredict Dashboard</title>
+</head>
+<body>
+
+<h2>SecurePredict Dashboard</h2>
+
+<input id="vibration" placeholder="vibration"><br>
+<input id="temperature" placeholder="temperature"><br>
+<input id="pressure" placeholder="pressure"><br>
+<input id="voltage" placeholder="voltage"><br>
+<input id="current" placeholder="current"><br>
+<input id="rpm" placeholder="rpm"><br>
+<input id="network_delay" placeholder="network_delay"><br>
+<input id="device_id" placeholder="device_id"><br>
+<input id="sound" placeholder="sound"><br>
+<input id="humidity" placeholder="humidity"><br><br>
+
+<button onclick="predict()">Predict</button>
+<button onclick="simulate()">Auto Simulate</button>
+
+<h3 id="prediction">Prediction: </h3>
+<h3 id="cyber">Cyber Analysis: </h3>
+
+<script>
+
+function predict(){
+    fetch('/predict', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            vibration: document.getElementById('vibration').value,
+            temperature: document.getElementById('temperature').value,
+            sound: document.getElementById('sound').value,
+            rpm: document.getElementById('rpm').value,
+            network_delay: document.getElementById('network_delay').value
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById('prediction').innerText = "Prediction: " + data.prediction;
+        document.getElementById('cyber').innerText = "Cyber Analysis: " + data.cyber;
+    });
+}
+
+function simulate(){
+    fetch('/simulate')
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById('vibration').value = data.vibration;
+        document.getElementById('temperature').value = data.temperature;
+        document.getElementById('pressure').value = data.pressure;
+        document.getElementById('voltage').value = data.voltage;
+        document.getElementById('current').value = data.current;
+        document.getElementById('rpm').value = data.rpm;
+        document.getElementById('network_delay').value = data.network_delay;
+        document.getElementById('device_id').value = data.device_id;
+        document.getElementById('sound').value = data.sound;
+        document.getElementById('humidity').value = data.humidity;
+
+        document.getElementById('prediction').innerText = "Prediction: " + data.prediction;
+        document.getElementById('cyber').innerText = "Cyber Analysis: " + data.cyber;
+    });
+}
+
+</script>
+
+</body>
+</html>
